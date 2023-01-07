@@ -1,7 +1,7 @@
-name: Build on push to fnets-patch-1
+name: Build on push to main
 on:
   push:
-    branches: [ fnets-patch-1 ]
+    branches: [ main ]
 
 jobs:
   build_commit:
