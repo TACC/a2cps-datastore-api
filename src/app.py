@@ -14,6 +14,8 @@ from dash.exceptions import PreventUpdate
 
 
 server = flask.Flask('app')
+app.scripts.config.serve_locally = False
+
 
 # ---------------------------------
 #   Get Data From datastore
@@ -98,7 +100,8 @@ external_stylesheets_list = [dbc.themes.SANDSTONE, 'https://codepen.io/chriddyp/
 app = Dash('app', server=server,
                 external_stylesheets=external_stylesheets_list,
                 suppress_callback_exceptions=True,
-                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}])
+                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}]
+                requests_pathname_prefix='/app/dashapp/')
 
 app.layout = serve_layout
 
