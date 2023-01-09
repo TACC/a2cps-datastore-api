@@ -128,7 +128,7 @@ def update_datastore(n_clicks, api, datastore_dict):
     api_json = {}
     print(api)
     print(os.environ.get("REQUESTS_PATHNAME_PREFIX", "no, environget isn't working"))
-    print(os.environ.get("DATASTORE_URL", "URL NOT FOUND"))
+    print(os.environ.get("FRANK", "URL NOT FOUND"))
     if api:
         api_address = os.environ.get("DATASTORE_URL", "URL NOT FOUND") + api
         api_json = get_api_data(api_address)
