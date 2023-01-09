@@ -1,4 +1,6 @@
 
+import os # Operating system library
+
 import requests
 import flask
 import traceback
@@ -99,7 +101,7 @@ app = Dash('app', server=server,
                 external_stylesheets=external_stylesheets_list,
                 suppress_callback_exceptions=True,
                 meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}],
-                requests_pathname_prefix='/app/dashapp/')
+                requests_pathname_prefix=os.environ.get("REQUESTS_PATHNAME_PREFIX", "/"))
 
 app.scripts.config.serve_locally = False
 app.layout = serve_layout
