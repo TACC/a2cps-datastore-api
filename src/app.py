@@ -128,7 +128,7 @@ def update_datastore(n_clicks, api, datastore_dict):
     api_json = {}
     print(api)
     if api:
-        api_address = "http://datastore:8050/api/" + api
+        api_address = os.environ.get("DATASTORE_URL", "/") + api
         api_json = get_api_data(api_address)
         if api_json:
             datastore_dict[api] = api_json
