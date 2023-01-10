@@ -18,6 +18,7 @@ from dash.exceptions import PreventUpdate
 server = flask.Flask('app')
 ## Demonstrate that app is accessing the env variables properly
 DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
+DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
 print(DATASTORE_URL)
 print(os.environ.get("REQUESTS_PATHNAME_PREFIX", "no, environget isn't working"))
 
