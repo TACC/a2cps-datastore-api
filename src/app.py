@@ -16,6 +16,10 @@ from dash.exceptions import PreventUpdate
 
 
 server = flask.Flask('app')
+## Demonstrate that app is accessing the env variables properly
+DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
+print(DATASTORE_URL)
+print(os.environ.get("REQUESTS_PATHNAME_PREFIX", "no, environget isn't working"))
 
 # ---------------------------------
 #   Get Data From datastore
@@ -127,10 +131,9 @@ def update_datastore(n_clicks, api, datastore_dict):
         datastore_dict = {}
     api_json = {}
     print(api)
-    print(os.environ.get("REQUESTS_PATHNAME_PREFIX", "no, environget isn't working"))
-    print(os.environ.get("FRANK", "URL NOT FOUND"))
+
     if api:
-        api_address = os.environ.get("DATASTORE_URL", "URL NOT FOUND") + api
+        api_address = DATASTORE_URL + api
         api_json = get_api_data(api_address)
         if api_json:
             datastore_dict[api] = api_json
