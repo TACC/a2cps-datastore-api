@@ -1,4 +1,6 @@
 
+import os # Operating system library
+
 import requests
 import flask
 import traceback
@@ -14,6 +16,11 @@ from dash.exceptions import PreventUpdate
 
 
 server = flask.Flask('app')
+## Demonstrate that app is accessing the env variables properly
+DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
+DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
+print(DATASTORE_URL)
+print(os.environ.get("REQUESTS_PATHNAME_PREFIX", "no, environget isn't working"))
 
 # ---------------------------------
 #   Get Data From datastore
@@ -98,8 +105,10 @@ external_stylesheets_list = [dbc.themes.SANDSTONE, 'https://codepen.io/chriddyp/
 app = Dash('app', server=server,
                 external_stylesheets=external_stylesheets_list,
                 suppress_callback_exceptions=True,
-                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}])
+                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}],
+                requests_pathname_prefix=os.environ.get("REQUESTS_PATHNAME_PREFIX", "/"))
 
+app.scripts.config.serve_locally = False
 app.layout = serve_layout
 
 if __name__ == '__main__':
@@ -123,8 +132,9 @@ def update_datastore(n_clicks, api, datastore_dict):
         datastore_dict = {}
     api_json = {}
     print(api)
+
     if api:
-        api_address = "http://datastore:8050/api/" + api
+        api_address = DATASTORE_URL + api
         api_json = get_api_data(api_address)
         if api_json:
             datastore_dict[api] = api_json
