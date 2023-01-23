@@ -145,7 +145,8 @@ def update_datastore(n_clicks, api, datastore_dict):
     options = []
     if datastore_dict:
         for api in datastore_dict.keys():
-            print('datastore_dict:' + datastore_dict[api])
+            print('datastore_dict:')
+            print(datastore_dict[api])
             api_label = api + ' [' + datastore_dict[api]['date'] + ']'
             api_header_option = {'label': api_label, 'value': api_label, 'disabled': True}
             options.append(api_header_option)
