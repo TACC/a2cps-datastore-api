@@ -73,7 +73,7 @@ app = Dash('app', server=server,
                 suppress_callback_exceptions=True,
                 meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}])
 
-app.layout = basic_layout #serve_layout
+app.layout = basic_layout() #serve_layout
 
 
 if __name__ == '__main__':
