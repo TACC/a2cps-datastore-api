@@ -71,9 +71,11 @@ app = Dash('app', server=server,
                 assets_ignore='.*',
                 external_stylesheets=external_stylesheets_list,
                 suppress_callback_exceptions=True,
-                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}])
+                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}],
+                requests_pathname_prefix=os.environ.get("REQUESTS_PATHNAME_PREFIX", "/"))
 
-app.layout = basic_layout() #serve_layout
+app.scripts.config.serve_locally = False
+app.layout = basic_layout #serve_layout
 
 
 if __name__ == '__main__':
