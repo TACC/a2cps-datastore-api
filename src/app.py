@@ -68,6 +68,7 @@ def basic_layout():
 external_stylesheets_list = [dbc.themes.SANDSTONE, 'https://codepen.io/chriddyp/pen/bWLwgP.css'] #  set any external stylesheets
 
 app = Dash('app', server=server,
+                assets_ignore='.*')
                 external_stylesheets=external_stylesheets_list,
                 suppress_callback_exceptions=True,
                 meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}])
