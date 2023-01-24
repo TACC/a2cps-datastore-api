@@ -40,20 +40,16 @@ def get_api_data(api_address):
         api_json['json'] = 'error: {}'.format(e)
         return api_json
 
-
-#
-# print("data from datastore:", datafeed)
-
-
-
-
 def basic_layout():
     api = 'consort'
     api_address = DATASTORE_URL + api
     api_json = get_api_data(api_address)
     if api_json:
         print('got api-json')
+        print(api_address)
+        print(api_json)
         child_div = json.dumps(api_json)
+        print(child_div)
     else:
         print('no api-json')
         child_div = html.P('api_json failed')
