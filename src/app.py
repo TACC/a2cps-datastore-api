@@ -17,6 +17,7 @@ DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
 DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
 
 server = flask.Flask('app')
+DATASTORE_URL = environ.get("DATASTORE_URL")
 
 # ---------------------------------
 #   Get Data From datastore
@@ -49,7 +50,7 @@ def get_api_data(api_address):
 
 def basic_layout():
     api = 'consort'
-    api_address = "http://datastore:8050/api/" + api
+    api_address = api_address = DATASTORE_URL + api
     api_json = get_api_data(api_address)
     if api_json:
         print('got api-json')
