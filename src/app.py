@@ -98,6 +98,8 @@ def basic_layout():
     api_json = get_api_data(api_address)
     if api_json:
         print('got api-json')
+        print(api_address)
+        print(api_json)
     else:
         print('no api-json')
 
