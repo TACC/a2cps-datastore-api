@@ -1,4 +1,4 @@
-
+import os
 import requests
 import flask
 import traceback
@@ -12,6 +12,8 @@ import dash_bootstrap_components as dbc
 from dash import Dash, callback, clientside_callback, html, dcc, dash_table as dt, Input, Output, State, MATCH, ALL
 from dash.exceptions import PreventUpdate
 
+DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
+# DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
 
 server = flask.Flask('app')
 
@@ -124,7 +126,7 @@ def update_datastore(n_clicks, api, datastore_dict):
     api_json = {}
     print(api)
     if api:
-        api_address = "http://datastore:8050/api/" + api
+        api_address = DATASTORE_URL + api
         api_json = get_api_data(api_address)
         if api_json:
             datastore_dict[api] = api_json
