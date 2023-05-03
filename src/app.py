@@ -131,8 +131,9 @@ def update_datastore(n_clicks, api, datastore_dict):
     print(api)
     if api:
         api_address = DATASTORE_URL + api
-        div_message.append(html.P(api_address))    
+        print(api_address)
         api_json = get_api_data(api_address)
+        print(api_json)
         if api_json:
             datastore_dict[api] = api_json
             div_message.append(html.P('got api-json'))    
@@ -143,13 +144,14 @@ def update_datastore(n_clicks, api, datastore_dict):
 
     options = []
     if datastore_dict:
-        for api in datastore_dict.keys():
-            div_message.append(html.P(api))    
-            print(api)
-            print(datastore_dict[api].keys())
-            for key in datastore_dict[api].keys():
-                print(type(key))
-            api_label = api + ' [' + datastore_dict[api]['date'] + ']'
+        print(datastore_dict)
+    #     for api in datastore_dict.keys():
+    #         div_message.append(html.P(api))    
+    #         print(api)
+    #         print(datastore_dict[api].keys())
+    #         for key in datastore_dict[api].keys():
+    #             print(type(key))
+    #         api_label = api + ' [' + datastore_dict[api]['date'] + ']'
             # api_header_option = {'label': api_label, 'value': api_label, 'disabled': True}
             # options.append(api_header_option)
             # for dataframe in datastore_dict[api]['data'].keys():
