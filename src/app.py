@@ -1,4 +1,3 @@
-
 import os
 import requests
 import flask
@@ -14,7 +13,8 @@ from dash import Dash, callback, clientside_callback, html, dcc, dash_table as d
 from dash.exceptions import PreventUpdate
 
 DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
-DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
+# DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
+
 
 server = flask.Flask('app')
 
@@ -85,7 +85,109 @@ if __name__ == '__main__':
 # ---------------------------------
 #   Callbacks
 # ---------------------------------
+@app.callback(
+    Output('store_data', 'data'),
+    Output('dropdown_datastores', 'options'),
+    Input('submit-api', 'n_clicks'),
+    State('dropdown-api', 'value'),
+    State('store_data', 'data')
+)
+def update_datastore(n_clicks, api, datastore_dict):
+    if n_clicks == 0:
+        raise PreventUpdate
+    if not datastore_dict:
+        datastore_dict = {}
+    api_json = {}
+    print(api)
+    if api:
+        api_address = DATASTORE_URL + api
+        api_json = get_api_data(api_address)
+        if api_json:
+            datastore_dict[api] = api_json
+            print('got api-json')
+        else:
+            print('no api-json')
 
+    options = []
+    if datastore_dict:
+        for api in datastore_dict.keys():
+            api_label = api + ' [' + datastore_dict[api]['date'] + ']'
+            api_header_option = {'label': api_label, 'value': api_label, 'disabled': True}
+            options.append(api_header_option)
+            for dataframe in datastore_dict[api]['data'].keys():
+            #     api_dataframe_label = api + '_' + datastore_dict[api][dataframe]
+                # api_dataframe_option = {'label': api_dataframe_label, 'value': api_dataframe_label}
+                api_dataframe_option = {'label': '  -' + dataframe, 'value': api + ':' + dataframe}
+                options.append(api_dataframe_option)
+        # print(datastore_dict[api]['date'])
+        # print(datastore_dict[api]['data'].keys())
 
+    # options = list(datastore_dict[api]['data'].keys())
+    # print(datastore_dict.keys())
+    # for key in datastore_dict.keys():
+    #     if datastore_dict[key] is dict:
+    #         print(datastore_dict[key].keys())
+    #         for k in datastore_dict[key].keys():
+    #             if datastore_dict[k] is dict:
+    #                 print(datastore_dict[key][k].keys())
+    else:
+        print('no datastore_dict')
+    return datastore_dict, options
 
+@app.callback(
+    # Output('dropdown_datastores', 'options'), store-table
+    Output('div-content','children'),
+    Input('dropdown_datastores', 'value'),
+    State('store_data', 'data')
+)
+def show_table(selected_dataframe, datastore_dict):
+    if selected_dataframe:
+        if selected_dataframe == 'consort':
+            return html.P('Consort')
+        else:
+            api, dataframe = selected_dataframe.split(':')
+            print(api, dataframe )
+            print(datastore_dict[api]['data'][dataframe][0])
+            div_table = dt.DataTable(
+                data=datastore_dict[api]['data'][dataframe],
+                virtualization=True,
+                    style_table={
+                    'overflowX': 'auto',
+                    'width':'100%',
+                    'margin':'auto'},
+                    page_current= 0,
+                    page_size= 15,
+                # columns=[{"name": i, "id": i} for i in df.columns]
+            )
+            columns_list = list(datastore_dict[api]['data'][dataframe][0].keys())
+            # return html.P('stuff here')
+            columns_div = html.Div([
+                html.P('Table Columns:'), html.P(', '.join(columns_list))
+                ])
+            return html.Div([columns_div, div_table])
+    else:
+        return html.P('')
 
+# @app.callback(
+#     Output('div_content', 'children'),
+#     Ouput('store_data', 'data'),
+#     Input('dropdown-api', 'value'),
+#     State('store_data', 'data')
+# )
+# def update_content(api, data):
+#     div_json = ''
+#     if api:
+#         api_address = "http://datastore:8050/api/" + api
+#         div_json = get_api_data(api_address)
+#     # div_dict = json.loads(div_json)
+#     # kids = html.Div([html.P(k) for key in div_dict.keys()])
+#     k = list(div_json.keys())
+#     k_date =k[0]
+#     df_keys = list(div_json[k_date].keys())
+#     kids = []
+#     for key in df_keys:
+#         kids.append(html.P(key))
+#     dropdwn_dfs = dcc.Dropdown(
+#            options=df_keys
+#         )
+#     return html.Div([html.P('Please select a dataframe:'), dropdwn_dfs ])
