@@ -50,43 +50,43 @@ def serve_layout():
     layout = html.Div([
         dcc.Store(id='store_data'),
         html.H1('A2CPS Data from API'),
-        dbc.Row([
-            dbc.Col([
-                html.P('Call for new data from APIs (if needed):'),
-                dcc.Dropdown(
-                    id='dropdown-api',
-                   options=[
-                        # {'label': 'APIs', 'value': 'apis'},
-                        {'label': 'Consort', 'value': 'consort'},
-                       {'label': 'Subjects', 'value': 'subjects'},
-                       {'label': 'Imaging', 'value': 'imaging'},
-                       {'label': 'Blood Draws', 'value': 'blood'},
-                   ],
-                   # value='apis'
-                ),
-                html.Button('Reload API', id='submit-api', n_clicks=0),
-                html.P('Available Data / DataFrames '),
-                dcc.Loading(
-                    id="loading-content",
-                    type="default",
-                    children = [
-                        dcc.Dropdown(
-                            id ='dropdown_datastores'
-                        ),
-                    ]
-                    # children=[
-                    #         html.Div(id='div_content'),
-                    #         html.Div(id='div_table')
-                    #     ]
-                ),
+        # dbc.Row([
+        #     dbc.Col([
+        #         html.P('Call for new data from APIs (if needed):'),
+        #         dcc.Dropdown(
+        #             id='dropdown-api',
+        #            options=[
+        #                 # {'label': 'APIs', 'value': 'apis'},
+        #                 {'label': 'Consort', 'value': 'consort'},
+        #                {'label': 'Subjects', 'value': 'subjects'},
+        #                {'label': 'Imaging', 'value': 'imaging'},
+        #                {'label': 'Blood Draws', 'value': 'blood'},
+        #            ],
+        #            # value='apis'
+        #         ),
+        #         html.Button('Reload API', id='submit-api', n_clicks=0),
+        #         html.P('Available Data / DataFrames '),
+        #         dcc.Loading(
+        #             id="loading-content",
+        #             type="default",
+        #             children = [
+        #                 dcc.Dropdown(
+        #                     id ='dropdown_datastores'
+        #                 ),
+        #             ]
+        #             # children=[
+        #             #         html.Div(id='div_content'),
+        #             #         html.Div(id='div_table')
+        #             #     ]
+        #         ),
 
-                html.Div(id='df-columns'),
-            ],width=2),
-            dbc.Col([
-                dcc.Store(id='store-table'),
-                html.Div(id='div-content')
-            ], width=10),
-        ]),
+        #         html.Div(id='df-columns'),
+        #     ],width=2),
+        #     dbc.Col([
+        #         dcc.Store(id='store-table'),
+        #         html.Div(id='div-content')
+        #     ], width=10),
+        # ]),
 
 
     ])
