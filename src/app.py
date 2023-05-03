@@ -15,6 +15,7 @@ from dash.exceptions import PreventUpdate
 DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
 # DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
 
+
 server = flask.Flask('app')
 
 # ---------------------------------
@@ -27,7 +28,7 @@ def get_api_data(api_address):
         try:
             response = requests.get(api_address)
         except:
-            return('error: {}'.format(e))
+            return('error: "requests.get failed"' )
         request_status = response.status_code
         if request_status == 200:
             api_json = response.json()
@@ -39,56 +40,25 @@ def get_api_data(api_address):
         api_json['json'] = 'error: {}'.format(e)
         return api_json
 
-#
-# print("data from datastore:", datafeed)
+def basic_layout():
+    api = 'consort'
+    api_address = DATASTORE_URL + api
+    api_json = get_api_data(api_address)
+    if api_json:
+        print('got api-json')
+        print(api_address)
+        print(api_json)
+        child_div = json.dumps(api_json)
+        print(child_div)
+    else:
+        print('no api-json')
+        child_div = html.P('api_json failed')
 
-# ---------------------------------
-#   Page components
-# ---------------------------------
-def serve_layout():
-
-    layout = html.Div([
-        dcc.Store(id='store_data'),
-        html.H1('A2CPS Data from API'),
-        dbc.Row([
-            dbc.Col([
-                html.P('Call for new data from APIs (if needed):'),
-                dcc.Dropdown(
-                    id='dropdown-api',
-                   options=[
-                        # {'label': 'APIs', 'value': 'apis'},
-                        {'label': 'Consort', 'value': 'consort'},
-                       {'label': 'Subjects', 'value': 'subjects'},
-                       {'label': 'Imaging', 'value': 'imaging'},
-                       {'label': 'Blood Draws', 'value': 'blood'},
-                   ],
-                   # value='apis'
-                ),
-                html.Button('Reload API', id='submit-api', n_clicks=0),
-                html.P('Available Data / DataFrames '),
-                dcc.Loading(
-                    id="loading-content",
-                    type="default",
-                    children = [
-                        dcc.Dropdown(
-                            id ='dropdown_datastores'
-                        ),
-                    ]
-                    # children=[
-                    #         html.Div(id='div_content'),
-                    #         html.Div(id='div_table')
-                    #     ]
-                ),
-
-                html.Div(id='df-columns'),
-            ],width=2),
-            dbc.Col([
-                dcc.Store(id='store-table'),
-                html.Div(id='div-content')
-            ], width=10),
-        ]),
-
-
+    layout=html.Div([
+        html.H2('Basic Layout'),
+        html.Div(
+            child_div
+        )
     ])
     return layout
 
@@ -98,11 +68,15 @@ def serve_layout():
 external_stylesheets_list = [dbc.themes.SANDSTONE, 'https://codepen.io/chriddyp/pen/bWLwgP.css'] #  set any external stylesheets
 
 app = Dash('app', server=server,
+                assets_ignore='.*',
                 external_stylesheets=external_stylesheets_list,
                 suppress_callback_exceptions=True,
-                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}])
+                meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}],
+                requests_pathname_prefix=os.environ.get("REQUESTS_PATHNAME_PREFIX", "/"))
 
-app.layout = serve_layout
+app.scripts.config.serve_locally = False
+app.layout = basic_layout #serve_layout
+
 
 if __name__ == '__main__':
     app.run_server()
