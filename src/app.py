@@ -84,6 +84,7 @@ def serve_layout():
             ],width=2),
             dbc.Col([
                 dcc.Store(id='store-table'),
+                html.Div(id='div-message'),
                 html.Div(id='div-content')
             ], width=10),
         ]),
@@ -103,7 +104,6 @@ app = Dash('app', server=server,
                 meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}],
                 requests_pathname_prefix=os.environ.get("REQUESTS_PATHNAME_PREFIX", "/"))
 
-
 app.layout = serve_layout
 
 if __name__ == '__main__':
@@ -116,6 +116,7 @@ if __name__ == '__main__':
 @app.callback(
     Output('store_data', 'data'),
     Output('dropdown_datastores', 'options'),
+    Output('div-message','children'),
     Input('submit-api', 'n_clicks'),
     State('dropdown-api', 'value'),
     State('store_data', 'data')
@@ -123,22 +124,27 @@ if __name__ == '__main__':
 def update_datastore(n_clicks, api, datastore_dict):
     if n_clicks == 0:
         raise PreventUpdate
+    div_message = [html.P('message')]    
     if not datastore_dict:
         datastore_dict = {}
     api_json = {}
     print(api)
     if api:
         api_address = DATASTORE_URL + api
+        div_message.append(html.P(api_address))    
         api_json = get_api_data(api_address)
         if api_json:
             datastore_dict[api] = api_json
+            div_message.append(html.P('got api-json'))    
             print('got api-json')
         else:
             print('no api-json')
+            div_message.append(html.P('no api-json'))   
 
     options = []
     if datastore_dict:
         for api in datastore_dict.keys():
+            div_message.append(html.P(api))    
             api_label = api + ' [' + datastore_dict[api]['date'] + ']'
             api_header_option = {'label': api_label, 'value': api_label, 'disabled': True}
             options.append(api_header_option)
@@ -160,7 +166,8 @@ def update_datastore(n_clicks, api, datastore_dict):
     #                 print(datastore_dict[key][k].keys())
     else:
         print('no datastore_dict')
-    return datastore_dict, options
+    
+    return datastore_dict, options, div_message
 
 @app.callback(
     # Output('dropdown_datastores', 'options'), store-table
