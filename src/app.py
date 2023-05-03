@@ -145,14 +145,18 @@ def update_datastore(n_clicks, api, datastore_dict):
     if datastore_dict:
         for api in datastore_dict.keys():
             div_message.append(html.P(api))    
+            print(api)
+            print(datastore_dict[api].keys())
+            for key in datastore_dict[api].keys():
+                print(type(key))
             api_label = api + ' [' + datastore_dict[api]['date'] + ']'
-            api_header_option = {'label': api_label, 'value': api_label, 'disabled': True}
-            options.append(api_header_option)
-            for dataframe in datastore_dict[api]['data'].keys():
-            #     api_dataframe_label = api + '_' + datastore_dict[api][dataframe]
-                # api_dataframe_option = {'label': api_dataframe_label, 'value': api_dataframe_label}
-                api_dataframe_option = {'label': '  -' + dataframe, 'value': api + ':' + dataframe}
-                options.append(api_dataframe_option)
+            # api_header_option = {'label': api_label, 'value': api_label, 'disabled': True}
+            # options.append(api_header_option)
+            # for dataframe in datastore_dict[api]['data'].keys():
+            # #     api_dataframe_label = api + '_' + datastore_dict[api][dataframe]
+            #     # api_dataframe_option = {'label': api_dataframe_label, 'value': api_dataframe_label}
+            #     api_dataframe_option = {'label': '  -' + dataframe, 'value': api + ':' + dataframe}
+            #     options.append(api_dataframe_option)
         # print(datastore_dict[api]['date'])
         # print(datastore_dict[api]['data'].keys())
 
