@@ -13,7 +13,7 @@ from dash import Dash, callback, clientside_callback, html, dcc, dash_table as d
 from dash.exceptions import PreventUpdate
 
 DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
-# DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
+DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
 
 server = flask.Flask('app')
 
