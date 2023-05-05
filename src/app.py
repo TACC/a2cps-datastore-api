@@ -173,4 +173,3 @@ def show_table(selected_dataframe, datastore_dict):
         return html.Div([columns_div, div_table])
     else:
         return html.P('Please Select an API and Table to display data')
-
