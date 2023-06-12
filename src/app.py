@@ -34,10 +34,10 @@ def get_api_data(api_address):
             auth_check = requests.get(AUTH_CHECK_URL)
 
             if auth_check.status_code == 200:
-                logger.info(f"User '{auth_check.user.username}' has requested and retrieved their Tapis token")
-                response = requests.get(api_address)
+                logger.info(f"User '{auth_check.user.username}' has successfully requested an authorization check")
+                response = requests.get(api_address, auth_check)
             else:
-                logger.warning(f"User '{auth_check.user.username}' is attempting get Tapis token but something went wrong")
+                logger.warning(f"User '{auth_check.user.username}' has attempted an authorization check but something went wrong")
                 raise Exception
         
         except:
