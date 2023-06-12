@@ -31,16 +31,16 @@ def get_api_data(api_address):
     api_json = {}
     try:
         try:
-            auth_check = requests.get(AUTH_CHECK_URL)
+            auth_check = requests.get(AUTH_CHECK_URL, flask.request.cookies)
 
             if auth_check.status_code == 200:
-                logger.info(f"User '{auth_check.user.username}' has successfully requested an authorization check")
+                logger.info(f"User has successfully requested an authorization check")
                 response = requests.get(api_address, auth_check)
             else:
-                logger.warning(f"User '{auth_check.user.username}' has attempted an authorization check but something went wrong")
+                logger.warning(f"User has attempted an authorization check but something went wrong")
                 raise Exception
         
-        except:
+        except Exception as e:
             return('error: {}'.format(e))
         
         request_status = response.status_code
