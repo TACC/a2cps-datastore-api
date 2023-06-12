@@ -2,6 +2,8 @@ import os
 import requests
 import flask
 import traceback
+import logging
+
 
 import requests
 import json
@@ -15,6 +17,10 @@ from dash.exceptions import PreventUpdate
 DATASTORE_URL = os.environ.get("DATASTORE_URL","url not found")
 DATASTORE_URL = os.path.join(DATASTORE_URL, "api/")
 
+AUTH_CHECK_URL = os.environ.get("AUTH_CHECK_URL","url not found")
+
+logger = logging.getLogger(__name__)
+
 server = flask.Flask('app')
 
 # ---------------------------------
@@ -25,9 +31,18 @@ def get_api_data(api_address):
     api_json = {}
     try:
         try:
-            response = requests.get(api_address)
+            auth_check = requests.get(AUTH_CHECK_URL)
+
+            if auth_check.status_code == 200:
+                logger.info(f"User '{auth_check.user.username}' has requested and retrieved their Tapis token")
+                response = requests.get(api_address)
+            else:
+                logger.warning(f"User '{auth_check.user.username}' is attempting get Tapis token but something went wrong")
+                raise Exception
+        
         except:
             return('error: {}'.format(e))
+        
         request_status = response.status_code
         if request_status == 200:
             api_json = response.json()
