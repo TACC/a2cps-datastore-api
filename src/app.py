@@ -31,7 +31,7 @@ def get_api_data(api_address):
     api_json = {}
     try:
         try:
-            response = requests.get(api_address, flask.request.cookies)
+            response = requests.get(api_address, cookies=flask.request.cookies)
         except Exception as e:
             return('error: {}'.format(e))
         
