@@ -30,7 +30,6 @@ WORKDIR /home/appuser/app
 
 COPY --chown=appuser:appuser src /home/appuser/app
 RUN chmod -R 755 /home/appuser/app
-RUN echo "local(options(shiny.port = 8050, shiny.host = '0.0.0.0'))" > /usr/lib/R/etc/Rprofile.site
 
 EXPOSE 8050
 CMD ["R", "-e", "shiny::runApp('/home/appuser/app')"]
